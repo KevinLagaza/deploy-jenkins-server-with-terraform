@@ -36,3 +36,20 @@ The required plugins and modules will be installed as well as the initialization
 
 **![Terraform apply](./terraform/imgs/terraform-apply.png)**
 
+
+### 4) Resource verification
+
+
+### 5) Testing the Jenkins installation
+
+- Connect to the ec2 instance
+- Run `docker exec jenkins cat /var/jenkins_home/secrets/initialAdminPassword`
+- Copy the password and paste it onto the jenkins starting interface
+- 
+
+
+### 6) Destroy all the resources previously created
+
+- `terraform destroy`
+
+

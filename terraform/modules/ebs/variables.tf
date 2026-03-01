@@ -1,3 +1,9 @@
+variable "instance_name" {
+  description = "Name of the EC2 instance"
+  type        = string
+#   default     = "ec2"
+}
+
 variable "root_volume_size" {
   description = "Size of the root volume in GB"
   type        = number

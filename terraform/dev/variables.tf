@@ -7,7 +7,7 @@ variable "aws_region" {
 variable "instance_name" {
   description = "Name of the instance"
   type        = string
-  default = "ec2-server"
+#   default = "ec2-server"
 }
 
 variable "project_name" {
@@ -45,9 +45,16 @@ variable "ingress_rules" {
   }))
   default = [
     {
-      description = "HTTP"
+      description = "Jenkins"
       from_port   = 8080
       to_port     = 8080
+      protocol    = "tcp"
+      cidr_blocks = ["0.0.0.0/0"]
+    },
+    {
+      description = "Jenkins Agent"
+      from_port   = 50000
+      to_port     = 50000
       protocol    = "tcp"
       cidr_blocks = ["0.0.0.0/0"]
     },

@@ -22,8 +22,3 @@ output "ami_id" {
   description = "AMI ID used for the instance"
   value       = data.aws_ami.ubuntu_bionic.id
 }
-
-# output "ebs_volume_id" {
-#   description = "ID of the attached EBS volume"
-#   value       = aws_ebs_volume.this[0].id
-# }
