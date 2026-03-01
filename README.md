@@ -18,13 +18,22 @@ The objective of this project is to design a **Continuous Integration (CI)** and
 After cloning the repository, do the following:
 
 ### 1) Intialize your terraform folder
-The required plugins and modules will be installed
+The required plugins and modules will be installed as well as the initialization of the backend that will store the tfsate file.
+
 - `cd <terraform_folder_name>` 
 - `terraform init`
+
+**![Terraform init](./terraform/imgs/terraform-init.png)**
 
 ### 2) Ensure there are no syntax errors
 
 - `terraform plan`
 
-### 3) Ensure there are no syntax errors
+**![Terraform plan](./terraform/imgs/terraform-plan.png)**
+
+### 3) Provionning of resources
+
+- `terraform apply`
+
+**![Terraform apply](./terraform/imgs/terraform-apply.png)**
 

@@ -1,16 +1,3 @@
-# #!/bin/bash
-# set -e
- 
-# # user_data = script exécuté au 1er boot par cloud-init
-# # Avantage : pas besoin de SSH / remote-exec
-# # On configure la machine dès son démarrage.
- 
-# apt-get update -y
-# apt-get install -y nginx
- 
-# systemctl enable nginx
-# systemctl start nginx
-
 #!/bin/bash
 set -e
 
