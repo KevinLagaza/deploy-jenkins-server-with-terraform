@@ -2,8 +2,7 @@
 
 ## Getting started
 
-The objective of this project is to design a **Continuous Integration (CI)** and **Continuous Deployment (CD)** pipeline for deploying a  [Spring Boot application](https://github.com/eazytraining/PayMyBuddy) on AWS.
-
+This project involves developing several Terraform modules to facilitate the automated and reproducible deployment of a Jenkins server on AWS infrastructure. Upon execution, the modules will export relevant metadata to a text file stored locally on the machine running Terraform.
 
 ## Prerequisites
 
