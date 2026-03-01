@@ -7,9 +7,9 @@ The objective of this project is to design a **Continuous Integration (CI)** and
 
 ## Prerequisites
 
-- Install terraform on your laptop
-- Create an AWS account if not done yet
-- Create a folder where you create the credentials' file
+- Install terraform on your laptop.
+- Create an AWS account if not done yet.
+- Create a folder where you create the credentials' file that will contain the access and secret IDs.
 
 ## Execution
 
