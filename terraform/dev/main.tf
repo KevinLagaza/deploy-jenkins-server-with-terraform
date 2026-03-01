@@ -86,6 +86,7 @@ module "ebs" {
   )
 }
 
+# Volume attachement
 resource "aws_volume_attachment" "this" {
   depends_on  = [module.ebs]
   device_name = var.ebs_device_name

@@ -7,7 +7,7 @@ variable "aws_region" {
 variable "instance_name" {
   description = "Name of the instance"
   type        = string
-  default = "server"
+  default = "ec2-server"
 }
 
 variable "project_name" {
@@ -25,7 +25,7 @@ variable "vpc_id" {
 variable "instance_type" {
   description = "EC2 instance type"
   type        = string
-  default     = "m7i-flex.large"
+  default     = "t3-micro"
 }
 
 variable "ebs_volume_size" {
