@@ -82,6 +82,8 @@ After connecting to the AWS console, we can now see the resources that are suppo
 
 - `terraform destroy`
 
+**NB:** Do not forget to detach and delete the volume.
+
 We can now destroy the resources in order not to get billed unknowingly.
 
 **![Terraform destroy](./terraform/imgs/terraform-destroy.png)**
