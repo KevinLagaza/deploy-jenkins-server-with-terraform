@@ -39,17 +39,50 @@ The required plugins and modules will be installed as well as the initialization
 
 ### 4) Resource verification
 
+After connecting to the AWS console, we can now see the resources that are supposed to be created.
+- EC2 instance
+
+**![EC2 instance](./terraform/imgs/ec2-instance.png)**
+
+- Key Pair
+
+**![EIP](./terraform/imgs/key-pair.png)**
+
+- Securtity Group
+
+**![EC2 instance](./terraform/imgs/sg.png)**
+
+**![EC2 instance](./terraform/imgs/sg-attached-to-ec2.png)**
+
+- Elastic IP
+
+**![EIP](./terraform/imgs/eip.png)**
+
+- Elastic Block Store
+
+**![EBS](./terraform/imgs/ebs.png)**
+
+- Local files (.txt and .pem files)
+
+**![Local files](./terraform/imgs/local-files.png)**
 
 ### 5) Testing the Jenkins installation
 
-- Connect to the ec2 instance
-- Run `docker exec jenkins cat /var/jenkins_home/secrets/initialAdminPassword`
-- Copy the password and paste it onto the jenkins starting interface
-- 
+- Connect to the ec2 instance.
+- Run `docker exec jenkins cat /var/jenkins_home/secrets/initialAdminPassword`.
+- Copy the password and paste it onto the jenkins starting interface.
 
+**![Jenkins Start](./terraform/imgs/jenkins-start.png)**
+
+**![Jenkins Complete](./terraform/imgs/jenkins-complete.png)**
+
+**![Jenkins Ready](./terraform/imgs/jenkins-ready.png)**
 
 ### 6) Destroy all the resources previously created
 
 - `terraform destroy`
 
+We can now destroy the resources in order not to get billed unknowingly.
+
+**![Terraform destroy](./terraform/imgs/terraform-destroy.png)**
 
