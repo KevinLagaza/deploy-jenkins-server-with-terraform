@@ -7,13 +7,13 @@ variable "aws_region" {
 variable "instance_name" {
   description = "Name of the instance"
   type        = string
-#   default = "ec2-server"
+  default = "Jenkins-server-dev"
 }
 
 variable "project_name" {
   description = "Name of the project"
   type        = string
-  default     = "my-project"
+  default     = "deploy-jenkins-project-dev"
 }
 
 variable "vpc_id" {
@@ -25,7 +25,7 @@ variable "vpc_id" {
 variable "instance_type" {
   description = "EC2 instance type"
   type        = string
-  default     = "t3-micro"
+  default     = "m7i-flex.large"
 }
 
 variable "ebs_volume_size" {
@@ -91,7 +91,7 @@ variable "ec2_user" {
 variable "private_key_path" {
   description = "Path to the private SSH key file"
   type        = string
-  default     = "../../.secrets/deploy_app.pem"
+  default     = "../../.secrets/deploy_app_dev.pem"
 }
 
 variable "common_tags" {

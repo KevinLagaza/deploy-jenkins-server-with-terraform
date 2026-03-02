@@ -41,9 +41,10 @@ module "security_group" {
 
 # Module EC2
 module "ec2" {
+    
   source     = "../modules/ec2"
   depends_on = [module.security_group]
-     
+ instance_name = var.instance_name
   instance_type      = var.instance_type
   security_group_ids = [module.security_group.security_group_id]
 
@@ -76,12 +77,10 @@ module "ebs" {
 
   ebs_volume_size              = var.ebs_volume_size
   ebs_volume_type              = var.ebs_volume_type
-
   tags = merge(
     var.tags,
     {
-    #   Name = "${module.ec2.instance_name}-ebs"
-    Name = "ebs"
+      Name = "${var.instance_name}-ebs"
     }
   )
 }
