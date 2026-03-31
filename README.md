@@ -233,7 +233,13 @@ ssh -i jenkins-key.pem ubuntu@$(cat ip_ec2.txt)
 docker exec jenkins cat /var/jenkins_home/secrets/initialAdminPassword
 ```
 
+<<<<<<< HEAD
 ### Step 3: Access Jenkins Web Interface
+=======
+**NB:** Do not forget to detach and delete the volume.
+
+We can now destroy the resources in order not to get billed unknowingly.
+>>>>>>> 759119f97577b00783a417be31d3d3cfbee4e4da
 
 Open your browser and navigate to:
 ```
