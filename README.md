@@ -1,88 +1,339 @@
-# deploy-jenkins-server-with-terraform
+# 🚀 Deploy Jenkins Server with Terraform
 
-## Getting started
+Automated and reproducible deployment of a Jenkins server on AWS infrastructure using Terraform modules.
 
-This project involves developing several Terraform modules to facilitate the automated and reproducible deployment of a Jenkins server on AWS infrastructure. Upon execution, the modules will export relevant metadata to a text file stored locally on the machine running Terraform.
+---
 
-## Prerequisites
+## 📋 Table of Contents
 
-- Install terraform on your laptop.
-- Create an AWS account if not done yet. Create a bucket that will contain the **terraform state** file.
-- Create a folder where you create the credentials' file that will contain the access and secret IDs. The file should look like this:
+- [Overview](#-overview)
+- [Architecture](#-architecture)
+- [Prerequisites](#-prerequisites)
+- [Project Structure](#-project-structure)
+- [Installation](#-installation)
+  - [Step 1: Initialize Terraform](#step-1-initialize-terraform)
+  - [Step 2: Validate Configuration](#step-2-validate-configuration)
+  - [Step 3: Provision Resources](#step-3-provision-resources)
+- [Verification](#-verification)
+- [Accessing Jenkins](#-accessing-jenkins)
+- [Cleanup](#-cleanup)
+- [Troubleshooting](#-troubleshooting)
 
-**![AWS credentials](./terraform/imgs/aws-cred.png)**
+---
 
-## Execution
+## 🎯 Overview
 
-After cloning the repository, do the following:
+This project provides a set of Terraform modules to automate the deployment of a Jenkins server on AWS. The infrastructure is fully reproducible and exports relevant metadata to local files for easy access.
 
-### 1) Intialize your terraform folder
-The required plugins and modules will be installed as well as the initialization of the backend that will store the tfsate file.
+### ✨ Features
 
-- `cd <terraform_folder_name>` 
-- `terraform init`
+- 🖥️ **EC2 Instance** - Ubuntu-based Jenkins server
+- 🔐 **SSH Key Pair** - Dynamically generated for secure access
+- 🛡️ **Security Group** - Pre-configured firewall rules
+- 🌐 **Elastic IP** - Static public IP address
+- 💾 **EBS Volume** - Persistent storage for Jenkins data
+- 📄 **Local Exports** - IP address and SSH key exported to local files
 
-**![Terraform init](./terraform/imgs/terraform-init.png)**
+---
 
-### 2) Ensure there are no syntax errors
+## 🏗️ Architecture
+```
+                         Internet
+                            │
+                            ▼
+                    ┌───────────────┐
+                    │  Elastic IP   │
+                    │ (Public IP)   │
+                    └───────────────┘
+                            │
+                            ▼
+                    ┌───────────────┐
+                    │Security Group │
+                    │  Port 22/SSH  │
+                    │ Port 8080/Web │
+                    └───────────────┘
+                            │
+                            ▼
+                    ┌───────────────┐
+                    │ EC2 Instance  │
+                    │   (Ubuntu)    │
+                    │               │
+                    │ ┌───────────┐ │
+                    │ │  Docker   │ │
+                    │ │ ┌───────┐ │ │
+                    │ │ │Jenkins│ │ │
+                    │ │ └───────┘ │ │
+                    │ └───────────┘ │
+                    └───────────────┘
+                            │
+                            ▼
+                    ┌───────────────┐
+                    │  EBS Volume   │
+                    │ (Persistent)  │
+                    └───────────────┘
+```
 
-- `terraform plan`
+---
 
-**![Terraform plan](./terraform/imgs/terraform-plan.png)**
+## 🔧 Prerequisites
 
-### 3) Provionning of resources
+| Requirement | Description |
+|-------------|-------------|
+| Terraform | Latest version installed ([Download](https://www.terraform.io/downloads)) |
+| AWS Account | Active account with appropriate permissions |
+| S3 Bucket | For storing Terraform state file |
+| AWS Credentials | Access Key ID and Secret Access Key |
 
-- `terraform apply`
+### 🔐 AWS Credentials Setup
 
-**![Terraform apply](./terraform/imgs/terraform-apply.png)**
+Create a credentials file with your AWS access keys:
+```
+~/.aws/credentials
+```
 
+or create a custom credentials file:
+```ini
+[dev]
+aws_access_key_id = YOUR_ACCESS_KEY_ID
+aws_secret_access_key = YOUR_SECRET_ACCESS_KEY
+```
 
-### 4) Resource verification
+![AWS credentials](./terraform/imgs/aws-cred.png)
 
-After connecting to the AWS console, we can now see the resources that are supposed to be created.
-- EC2 instance
+> ⚠️ **Security Note:** Never commit your credentials to version control!
 
-**![EC2 instance](./terraform/imgs/ec2-instance.png)**
+---
 
-- Key Pair
+## 📁 Project Structure
+```
+deploy-jenkins-server-with-terraform/
+├── terraform/
+│   ├── main.tf              # Main configuration
+│   ├── variables.tf         # Variable definitions
+│   ├── outputs.tf           # Output definitions
+│   ├── terraform.tfvars     # Variable values
+│   └── modules/
+│       ├── ec2/             # EC2 instance module
+│       │   ├── main.tf
+│       │   ├── variables.tf
+│       │   └── outputs.tf
+│       ├── eip/             # Elastic IP module
+│       │   ├── main.tf
+│       │   ├── variables.tf
+│       │   └── outputs.tf
+│       ├── ebs/             # EBS volume module
+│       │   ├── main.tf
+│       │   ├── variables.tf
+│       │   └── outputs.tf
+│       ├── key_pair/        # SSH key pair module
+│       │   ├── main.tf
+│       │   ├── variables.tf
+│       │   └── outputs.tf
+│       └── sg/              # Security group module
+│           ├── main.tf
+│           ├── variables.tf
+│           └── outputs.tf
+├── imgs/                    # Documentation images
+└── README.md
+```
 
-**![EIP](./terraform/imgs/key-pair.png)**
+---
 
-- Securtity Group
+## 🚀 Installation
 
-**![EC2 instance](./terraform/imgs/sg.png)**
+### Step 1: Initialize Terraform
 
-**![EC2 instance](./terraform/imgs/sg-attached-to-ec2.png)**
+Clone the repository and initialize Terraform:
+```bash
+git clone https://github.com/your-username/deploy-jenkins-server-with-terraform.git
+cd deploy-jenkins-server-with-terraform/terraform
+terraform init
+```
 
-- Elastic IP
+![Terraform init](./terraform/imgs/terraform-init.png)
 
-**![EIP](./terraform/imgs/eip.png)**
+✅ **Expected result:** Plugins and modules installed, backend initialized.
 
-- Elastic Block Store
+---
 
-**![EBS](./terraform/imgs/ebs.png)**
+### Step 2: Validate Configuration
 
-- Local files (.txt and .pem files)
+Check for syntax errors and preview the execution plan:
+```bash
+terraform plan
+```
 
-**![Local files](./terraform/imgs/local-files.png)**
+![Terraform plan](./terraform/imgs/terraform-plan.png)
 
-### 5) Testing the Jenkins installation
+✅ **Expected result:** No errors, list of resources to be created.
 
-- Connect to the ec2 instance.
-- Run `docker exec jenkins cat /var/jenkins_home/secrets/initialAdminPassword`.
-- Copy the password and paste it onto the jenkins starting interface.
+---
 
-**![Jenkins Start](./terraform/imgs/jenkins-start.png)**
+### Step 3: Provision Resources
 
-**![Jenkins Complete](./terraform/imgs/jenkins-complete.png)**
+Deploy the infrastructure:
+```bash
+terraform apply
+```
 
-**![Jenkins Ready](./terraform/imgs/jenkins-ready.png)**
+Type `yes` when prompted to confirm.
 
-### 6) Destroy all the resources previously created
+![Terraform apply](./terraform/imgs/terraform-apply.png)
 
-- `terraform destroy`
+✅ **Expected result:** All resources created successfully.
 
-We can now destroy the resources in order not to get billed unknowingly.
+---
 
-**![Terraform destroy](./terraform/imgs/terraform-destroy.png)**
+## ✅ Verification
 
+After deployment, verify the resources in the AWS Console:
+
+### 🖥️ EC2 Instance
+
+![EC2 instance](./terraform/imgs/ec2-instance.png)
+
+### 🔑 Key Pair
+
+![Key Pair](./terraform/imgs/key-pair.png)
+
+### 🛡️ Security Group
+
+![Security Group](./terraform/imgs/sg.png)
+
+![Security Group attached to EC2](./terraform/imgs/sg-attached-to-ec2.png)
+
+### 🌐 Elastic IP
+
+![EIP](./terraform/imgs/eip.png)
+
+### 💾 Elastic Block Store
+
+![EBS](./terraform/imgs/ebs.png)
+
+### 📄 Local Files Generated
+
+| File | Description |
+|------|-------------|
+| `ip_ec2.txt` | Public IP address of the Jenkins server |
+| `jenkins-key.pem` | SSH private key for EC2 access |
+
+![Local files](./terraform/imgs/local-files.png)
+
+---
+
+## 🔓 Accessing Jenkins
+
+### Step 1: Connect to EC2 Instance
+```bash
+ssh -i jenkins-key.pem ubuntu@$(cat ip_ec2.txt)
+```
+
+### Step 2: Get Jenkins Initial Password
+```bash
+docker exec jenkins cat /var/jenkins_home/secrets/initialAdminPassword
+```
+
+### Step 3: Access Jenkins Web Interface
+
+Open your browser and navigate to:
+```
+http://<ELASTIC_IP>:8080
+```
+
+### Step 4: Complete Setup
+
+1. Paste the initial admin password
+
+   ![Jenkins Start](./terraform/imgs/jenkins-start.png)
+
+2. Install suggested plugins
+
+   ![Jenkins Complete](./terraform/imgs/jenkins-complete.png)
+
+3. Create admin user and start using Jenkins
+
+   ![Jenkins Ready](./terraform/imgs/jenkins-ready.png)
+
+✅ **Jenkins is now ready to use!**
+
+---
+
+## 🧹 Cleanup
+
+To avoid unexpected AWS charges, destroy all resources when done:
+```bash
+terraform destroy
+```
+
+Type `yes` when prompted to confirm.
+
+![Terraform destroy](./terraform/imgs/terraform-destroy.png)
+
+> ⚠️ **Warning:** This will permanently delete all created resources including data stored on EBS volumes.
+
+---
+
+## 🛠️ Troubleshooting
+
+| Issue | Solution |
+|-------|----------|
+| `terraform init` fails | Check internet connection and AWS credentials |
+| `terraform apply` timeout | Verify AWS region and availability |
+| Cannot SSH to EC2 | Check security group rules and key pair permissions |
+| Jenkins not accessible | Verify port 8080 is open in security group |
+| Docker not running | Check user data script execution logs |
+
+### Useful Commands
+```bash
+# Check Terraform state
+terraform state list
+
+# View specific resource
+terraform state show module.ec2.aws_instance.this
+
+# View outputs
+terraform output
+
+# Force recreation of a resource
+terraform taint module.ec2.aws_instance.this
+terraform apply
+```
+
+### Debug EC2 User Data
+```bash
+# Connect to EC2 and check cloud-init logs
+ssh -i jenkins-key.pem ubuntu@<ELASTIC_IP>
+sudo cat /var/log/cloud-init-output.log
+```
+
+---
+
+## 📊 Terraform Modules
+
+| Module | Description |
+|--------|-------------|
+| `ec2` | Creates Ubuntu EC2 instance with Docker and Jenkins |
+| `eip` | Allocates and associates Elastic IP |
+| `ebs` | Creates and attaches persistent storage |
+| `key_pair` | Generates SSH key pair dynamically |
+| `sg` | Configures security group with required rules |
+
+---
+
+## 📚 Resources
+
+- [Terraform AWS Provider Documentation](https://registry.terraform.io/providers/hashicorp/aws/latest/docs)
+- [Jenkins Documentation](https://www.jenkins.io/doc/)
+- [AWS EC2 User Guide](https://docs.aws.amazon.com/ec2/)
+
+---
+
+## 👨‍💻 Author
+
+**Kevin Lagaza**
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License.
